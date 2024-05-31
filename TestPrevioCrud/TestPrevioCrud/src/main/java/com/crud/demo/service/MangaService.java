@@ -1,35 +1,46 @@
 package com.crud.demo.service;
 
-import java.util.List;
-import java.util.Optional;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 import com.crud.demo.modelo.Manga;
 import com.crud.demo.modeloDAO.MangaRepository;
+import com.crud.demo.serviceInterface.IMangaService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
-public class MangaService implements MangaServiceImpl {
+public class MangaService implements IMangaService {
 
     @Autowired
-    private MangaRepository dao;
+    private MangaRepository mangaRepository;
 
     @Override
-    public List<Manga> listar() {        
-        return (List<Manga>) dao.findAll();
+    public List<Manga> getAllMangas() {
+        return mangaRepository.findAll();
     }
 
     @Override
-    public Optional<Manga> listarId(Long id) {        
-        return dao.findById(id);
+    public Manga getMangaById(Long id) {
+        return mangaRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Manga not found"));
     }
 
     @Override
-    public Manga save(Manga m) {
-        return dao.save(m);
+    public Manga createManga(Manga manga) {
+        return mangaRepository.save(manga);
     }
 
     @Override
-    public void delete(Long id) {
-        dao.deleteById(id);
+    public Manga updateManga(Long id, Manga manga) {
+        Manga existingManga = mangaRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Manga not found"));
+        existingManga.setNombre(manga.getNombre());
+        // Actualiza los demás campos...
+        return mangaRepository.save(existingManga);
+    }
+
+    @Override
+    public void deleteManga(Long id) {
+        mangaRepository.deleteById(id);
     }
 }
