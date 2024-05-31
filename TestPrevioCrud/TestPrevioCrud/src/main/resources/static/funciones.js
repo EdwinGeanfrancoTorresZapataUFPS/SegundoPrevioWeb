@@ -27,6 +27,9 @@ function eliminar(id) {
 		});
 }
 
+// crear una funcion para leer el json
+// esa funcion debe eseparar los datos del arreglo json y 
+//subir uno por uno a la base de datos 
 
-
+// usar fetch == lectura del jspon a partir de una api 
 
